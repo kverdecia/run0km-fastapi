@@ -1,5 +1,4 @@
 from typing import List
-import os
 from urllib.parse import urljoin
 from http import HTTPStatus
 
@@ -7,9 +6,7 @@ from fastapi import FastAPI, HTTPException
 from databases import Database
 from pydantic import BaseModel
 
-
-DATABASE_URI = os.environ['DATABASE_URI']
-MEDIA_URL = os.environ.get('MEDIA_URL', 'https://www.run0km.com/media/')
+from localsettings import DATABASE_URI, MEDIA_URL
 
 
 app = FastAPI(title="Run0Km API")
