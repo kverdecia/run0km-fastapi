@@ -1,5 +1,4 @@
-from __future__ import annotations
-
+from typing import List
 import os
 from urllib.parse import urljoin
 from http import HTTPStatus
@@ -49,7 +48,7 @@ async def shutdown():
 
 
 @app.get('/brands')
-async def brand_list() -> list[Brand]:
+async def brand_list() -> List[Brand]:
     query = 'select id, name, code, logo as image from brands_carbrand where enabled = true'
     brands = [Brand.from_row(row) for row in await database.fetch_all(query)]
     return brands
@@ -66,7 +65,7 @@ async def brand_item(brand_id: int) -> Brand:
 
 
 @app.get('/brands/{brand_id}/models')
-async def brand_models(brand_id: int) -> list[Model]:
+async def brand_models(brand_id: int) -> List[Model]:
     query = '''
     select m.id, m.code, m.name, m.main_photo as image
     from brands_carbrand as b
