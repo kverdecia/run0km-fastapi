@@ -84,6 +84,28 @@ async def model_list():
     return models
 
 
+@app.get('/models/search')
+async def model_list(brand_name: str):
+    brand_query = '''
+    select id
+    from brands_carbrand
+    where name = :brand_name and enabled = true
+    '''
+    brand_params = {'brand_name': brand_name}
+    row = await database.fetch_one(brand_query, brand_params)
+    if row is None:
+        return []
+
+    model_query = '''
+    select id, code, name, main_photo as image
+    from brands_carmodel
+    where enabled = true and brand_id = :brand_id 
+    '''
+    model_params = {'brand_id': row['id']}
+    models = [Model.from_row(row) for row in await database.fetch_all(model_query, model_params)]
+    return models
+
+
 @app.get('/models/{model_id}')
 async def model_item(model_id: int) -> Model:
     query = '''
